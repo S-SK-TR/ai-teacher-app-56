@@ -5,7 +5,7 @@ import { MessageBubble } from './components/MessageBubble';
 import { ChatInput } from './components/ChatInput';
 import { ScenarioSelector } from './components/ScenarioSelector';
 import { Sparkles, Trash2, GraduationCap, ArrowLeft, Loader2 } from 'lucide-react';
-import { useChat } from 'ai/react';
+import { useChat } from '@ai-sdk/react';
 import { toast } from 'sonner';
 import { cn } from '../../lib/utils';
 
