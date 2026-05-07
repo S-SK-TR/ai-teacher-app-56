@@ -32,4 +32,32 @@ Plan dahilinde projenin altyapısı ve arayüzü uzman (Expert) seviyesine taş�
     *   Asenkron yüklemeler için `Suspense` ve `LoadingFallback` yapısı kuruldu.
 
 ---
-*Bu değişiklikler projenin UI/UX skorunu 90+ seviyesine çıkarmak ve sağlam bir teknik altyapı kurmak için yapılmıştır.*
+
+## 💬 Chat (Sohbet) Özelliği İmplementasyonu
+
+8.  **Zustand Chat Store**:
+    *   `src/features/chat/store/useChatStore.ts` oluşturuldu.
+    *   `persist` middleware ile sohbet geçmişinin tarayıcıda saklanması sağlandı.
+    *   Senaryo tabanlı (Airport, Restaurant, Interview) öğrenme altyapısı kuruldu.
+
+9.  **Gelişmiş Chat UI Bileşenleri**:
+    *   `MessageBubble`: Kullanıcı ve AI mesajları için farklı tasarımlar, TTS (Sesli Okuma) desteği ve animasyonlar eklendi.
+    *   `ChatInput`: Zod ve React Hook Form ile güçlendirilmiş, hata kontrollü mesaj giriş alanı.
+    *   `ScenarioSelector`: Mobil uyumlu, yatay kaydırılabilir senaryo seçim arayüzü.
+
+10. **ChatView & AI Simülasyonu**:
+    *   Full-screen chat görünümü (`ChatView.tsx`) oluşturuldu.
+    *   AI için mock cevap mantığı ve "yazıyor..." animasyonları eklendi.
+    *   Otomatik kaydırma (auto-scroll) özelliği entegre edildi.
+
+11. **Uygulama Entegrasyonu**:
+    *   `App.tsx` içerisine View State yönetimi eklendi.
+    *   Landing page ile Chat ekranı arasında pürüzsüz geçişler (AnimatePresence) sağlandı.
+
+12. **Premium Özellikler & Test**:
+    *   **TTS (Text-to-Speech)**: AI mesajlarının sesli okunması sağlandı.
+    *   **Zod Validation**: Mesaj girişlerinde veri doğruluğu garanti edildi.
+    *   **Responsive Check**: Tüm arayüz mobil, tablet ve masaüstü için optimize edildi.
+
+---
+*Bu değişiklikler ile uygulama, AI destekli bir eğitim aracının tüm temel ve premium özelliklerine kavuşmuştur.*
