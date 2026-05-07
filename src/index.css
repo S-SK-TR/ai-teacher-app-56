@@ -1,0 +1,69 @@
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* PREMIUM UI: Tema C - Glassmorphism / Vibrant için CSS değişkenleri */
+:root {
+  --bg-base: linear-gradient(135deg, #1e1b4b 0%, #0f172a 50%, #134e4a 100%);
+  --glass-bg: rgba(255, 255, 255, 0.06); /* Daha şeffaf ve hafif */
+  --glass-border: rgba(255, 255, 255, 0.12); /* Daha belirgin kenarlık */
+  --glass-glow: rgba(59, 130, 246, 0.1);
+  --text-primary: #f8fafc;
+  --text-muted: #94a3b8;
+  --brand-500: 271 91% 65%; /* violet-500 */
+  --brand-600: 271 91% 55%; /* hover için daha koyu ton */
+
+  /* PREMIUM UI: Typography için CSS değişkenleri */
+  --font-sans: 'Inter'; /* Gövde metinleri için */
+  --font-heading: 'Outfit'; /* Başlıklar için */
+}
+
+body {
+  margin: 0;
+  /* PREMIUM UI: font-family tanımı 'var(--font-sans)' üzerinden yönetiliyor. */
+  font-family: var(--font-sans), system-ui, -apple-system, sans-serif;
+  background: var(--bg-base);
+  color: var(--text-primary);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* PREMIUM UI: Glassmorphism Card Stili */
+.glass-card {
+  background: var(--glass-bg);
+  backdrop-filter: blur(16px) saturate(180%); /* Frontend_design.md'deki blur değeri */
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  border: 1px solid var(--glass-border);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  /* PREMIUM UI: Responsive tasarım için max-width eklendi */
+  max-width: 90%; /* Küçük ekranlarda %90 genişlik */
+}
+
+/* Premium Glassmorphism (genel amaçlı) */
+.glass-morphism {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* Smooth Transitions */
+* {
+  transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+}
