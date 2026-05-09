@@ -27,7 +27,7 @@ export default async function handler(req: Request) {
     `;
 
     const result = await streamText({
-      model: google('models/gemini-1.5-pro-latest'),
+      model: google('models/gemini-2.5-flash'),
       messages,
       system: systemPrompt,
     });
