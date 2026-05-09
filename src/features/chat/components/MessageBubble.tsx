@@ -15,9 +15,15 @@ export const MessageBubble: React.FC<MessageBubbleProps> = ({ message }) => {
 
   const speak = (text: string) => {
     if ('speechSynthesis' in window) {
+      // PREMIUM UI: Cancel any existing speech before starting new one
+      window.speechSynthesis.cancel();
+      
       const utterance = new SpeechSynthesisUtterance(text);
       utterance.lang = 'en-US';
-      utterance.rate = 0.9; // Biraz yavaş daha iyi öğrenme için
+      utterance.rate = 0.9;
+      
+      utterance.onstart = () => toast.info('Speaking...', { duration: 1000 });
+      
       window.speechSynthesis.speak(utterance);
     } else {
       toast.error('Browser does not support text-to-speech');

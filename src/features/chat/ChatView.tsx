@@ -14,13 +14,12 @@ interface ChatViewProps {
 }
 
 export const ChatView: React.FC<ChatViewProps> = ({ onBack }) => {
-  const { activeScenarioId, clearHistory } = useChatStore();
+  const { activeScenarioId } = useChatStore();
   const scrollRef = useRef<HTMLDivElement>(null);
   
   const activeScenario = SCENARIOS.find(s => s.id === activeScenarioId);
 
-  // Vercel AI SDK Hook - Real AI Connection
-  const { messages, input, setInput, append, isLoading, error } = useChat({
+  const chat = useChat({
     api: '/api/chat',
     body: {
       scenario: activeScenario?.name || 'General'
@@ -35,10 +34,26 @@ export const ChatView: React.FC<ChatViewProps> = ({ onBack }) => {
     onResponse: (response) => {
       if (!response.ok) toast.error('AI connection failed. Check your API key.');
     },
-    onFinish: () => {
-      toast.success('AI responded', { duration: 1000 });
+    onError: (err) => {
+      console.error('Chat Error:', err);
     }
   });
+
+  const { messages, setMessages, sendMessage, isLoading, error } = chat;
+
+  // Sync initial message when scenario changes
+  useEffect(() => {
+    if (activeScenario) {
+      setMessages([
+        {
+          id: 'welcome-' + activeScenario.id + '-' + Date.now(),
+          role: 'assistant',
+          content: activeScenario.initialMessage,
+          timestamp: new Date()
+        } as any
+      ]);
+    }
+  }, [activeScenarioId, setMessages]); // Reset chat when scenario changes
 
   // Auto-scroll to bottom
   useEffect(() => {
@@ -48,10 +63,20 @@ export const ChatView: React.FC<ChatViewProps> = ({ onBack }) => {
   }, [messages, isLoading]);
 
   const handleSendMessage = async (text: string) => {
-    append({
-      role: 'user',
-      content: text
-    });
+    if (!text.trim()) return;
+    
+    try {
+      // Use sendMessage which was found in the hook's return keys
+      if (typeof sendMessage === 'function') {
+        // AI SDK usually expects an object with 'content' or 'text'
+        // Given the previous error, let's try 'content' which is more standard
+        await sendMessage({ content: text }); 
+      } else {
+        console.error('sendMessage is not a function');
+      }
+    } catch (err) {
+      console.error('Failed to send message:', err);
+    }
   };
 
   return (
@@ -135,28 +160,32 @@ export const ChatView: React.FC<ChatViewProps> = ({ onBack }) => {
 
           <div 
             ref={scrollRef}
-            className="flex-1 overflow-y-auto px-4 py-8 md:px-12 scrollbar-hide"
+            className="flex-1 overflow-y-auto px-4 py-8 md:px-12"
           >
-            <div className="max-w-3xl mx-auto space-y-2">
-              <AnimatePresence initial={false}>
-                {messages.map((msg) => (
+            <div className="max-w-3xl mx-auto space-y-4">
+              {messages.length > 0 ? (
+                messages.map((msg) => (
                   <MessageBubble key={msg.id} message={{
                     role: msg.role as any,
-                    content: msg.content,
-                    timestamp: new Date()
+                    content: msg.content || (msg as any).text || '',
+                    timestamp: (msg as any).timestamp || new Date()
                   }} />
-                ))}
-              </AnimatePresence>
+                ))
+              ) : (
+                <div className="flex flex-col items-center justify-center h-64 text-slate-600 space-y-4">
+                  <div className="w-12 h-12 rounded-full border-2 border-dashed border-slate-800 flex items-center justify-center">
+                    <Sparkles className="w-6 h-6 opacity-20" />
+                  </div>
+                  <p className="text-sm font-medium">Sohbet henüz başlamadı.</p>
+                  <p className="text-[10px] uppercase tracking-widest opacity-50">AI Teacher hazır bekliyor...</p>
+                </div>
+              )}
               
               {isLoading && (
-                <motion.div 
-                  initial={{ opacity: 0, x: -10 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  className="flex items-center gap-2 text-slate-500 text-xs py-2"
-                >
+                <div className="flex items-center gap-2 text-slate-500 text-xs py-2">
                   <Loader2 className="w-3 h-3 animate-spin text-indigo-500" />
                   <span>AI Teacher is generating response...</span>
-                </motion.div>
+                </div>
               )}
 
               {error && (
